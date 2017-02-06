@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, ListeLevel.class);
 
         Button b = (Button) v;
+        // On passe le numéro correspondant au niveau de difficulté
         intent.putExtra("level",""+ b.getText().charAt(b.length()-1));
         startActivity(intent);
     }

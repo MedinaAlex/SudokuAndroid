@@ -45,32 +45,35 @@ public class Dessin extends View implements View.OnTouchListener {
         int xUp;
         int yUp;
         switch (event.getAction()){
+            // Lors de l'appuie
             case MotionEvent.ACTION_DOWN:
                 for(int i=1;i<=9;i++){
+                    // on récupère le numéro du bouton sur lequel on a appuyé, comme les boutons ont été déssiné,
+                    // on doit effectué une vérification via coordonnées
                     if(x >= getWidth()/10*i-50 && x <=  getWidth()/10*i+50 && y >=  getWidth()+50 && y <=  getWidth()+150){
                         num = i;
                     }
                 }
-                Log.d("num", String.valueOf(num));
                 break;
-
+            // Lors du relachement
             case MotionEvent.ACTION_UP:
+                // Calcul de la case
                 xUp = x / (getWidth() /9);
                 yUp = y / (getWidth() /9);
-                if (xUp <9 && yUp <9){
-                    grille[xUp][yUp] = num;
-                    Log.d("num", String.valueOf(num));
-                }
 
+                if (xUp <9 && yUp <9){
+                    // On ajoute le numéro à la grille
+                    grille[xUp][yUp] = num;
+                }
+                // On redessine
                 invalidate();
 
-                Log.d("xUp", String.valueOf(xUp));
-                Log.d("yUp", String.valueOf(yUp));
                 num = 0;
                 break;
         }
         this.invalidate();
 
+        // Si terminé, on affiche un Toast
         if(check()){
             Toast toast= new Toast(getContext());
             toast.makeText(getContext(), "fini", Toast.LENGTH_LONG);
@@ -80,8 +83,14 @@ public class Dessin extends View implements View.OnTouchListener {
 
     }
 
+    /**
+     *  Méthode permettant de vérifier di la grille est terminée
+     * @return vrai si la grille est terminée, faux sinon
+     */
     public boolean check(){
         Boolean retour = true;
+
+        // Vérification via un ensemble, permet de ne pas avoir 2 fois le même numéron en son sein.
         Set<Integer> monSetLigne;
         Set<Integer> monSetColonne;
 
@@ -94,7 +103,8 @@ public class Dessin extends View implements View.OnTouchListener {
                     monSetColonne.add(grille[j][i]);
                 }
             }
-            if (monSetLigne.size() != 8 ||monSetColonne.size() != 8){
+            // Si la ligne ou la colonne n'a pas 9 numéros différent, alors la grille n'est pas terminée
+            if (monSetLigne.size() != 9 ||monSetColonne.size() != 9){
                 retour = false;
                 break;
             }
@@ -108,18 +118,6 @@ public class Dessin extends View implements View.OnTouchListener {
     protected void onDraw(Canvas canvas) {
         Paint paintLigne = new Paint();
 
-        for(int i = 1; i<= NBCASES; i++){
-
-            if(i % 3 == 0){
-                paintLigne.setStrokeWidth(6);
-            }
-            else{
-                paintLigne.setStrokeWidth(3);
-            }
-            canvas.drawLine(getWidth() / 9 *i, 0, getWidth() / 9 * i, getWidth(), paintLigne);
-            canvas.drawLine(0, getWidth()/ 9 *i, getWidth(), getWidth() / 9 * i, paintLigne);
-        }
-
         Paint paintRect = new Paint();
         paintRect.setStyle(Paint.Style.STROKE);
         paintLigne.setStrokeWidth(3);
@@ -127,11 +125,24 @@ public class Dessin extends View implements View.OnTouchListener {
         Paint paintString = new Paint();
         paintString.setTextSize(80);
 
-        for (int i = 1; i<= NBCASES; i++){
+        for(int i = 1; i<= NBCASES; i++){
+            // Permet de changer la largeur des lignes
+            if(i % 3 == 0){
+                paintLigne.setStrokeWidth(6);
+            }
+            else{
+                paintLigne.setStrokeWidth(3);
+            }
+            // On dessine les lignes horizontale et verticale.
+            canvas.drawLine(getWidth() / 9 *i, 0, getWidth() / 9 * i, getWidth(), paintLigne);
+            canvas.drawLine(0, getWidth()/ 9 *i, getWidth(), getWidth() / 9 * i, paintLigne);
+
+            // On dessine les carrés représentant les boutons avec leur chiffre dedans
             canvas.drawRect( getWidth() / 10 *i - 50, getWidth() + 50,  getWidth() / 10 * i + 50, getWidth()+ 150, paintRect);
             canvas.drawText(String.valueOf(i), getWidth() / 10 *i - 25, getWidth() + 125, paintString);
         }
 
+        // On va déssiner les numéros de la grille
         for (int i = 0; i < 9; i++){
             for (int j = 0; j < 9; j++){
                 if(grille[i][j] != 0){

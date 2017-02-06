@@ -17,6 +17,7 @@ import android.view.View;
 
 public class Grille extends Activity {
 
+    // Matrice des numéros de sudoku
     int[][] grille = new int[9][9];
 
     @Override
@@ -24,6 +25,7 @@ public class Grille extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.grille);
 
+        // Génération de la matrice selon le String
         String maGrille = (String) this.getIntent().getExtras().get("grille");
         int cpt = 0;
         for (int i = 0; i < 9; i++){
@@ -34,8 +36,8 @@ public class Grille extends Activity {
             }
         }
 
+        // Passage du modèle à la vue
         Dessin dessin = (Dessin) findViewById(R.id.Dessin);
-
         dessin.setGrille(grille);
 
     }

@@ -42,9 +42,10 @@ public class ListeLevel extends Activity {
 
         String level = (String) this.getIntent().getExtras().get("level");
 
-        // Values généré selon le fichier de grilles
         final List<VGrille> grilles = new ArrayList();
 
+
+        // Séléction du fichier selon le niveau de difficulté
         InputStream inputStream;
         if("1".equals(level)){
             inputStream = getResources().openRawResource(R.raw.fichier0);
@@ -55,10 +56,9 @@ public class ListeLevel extends Activity {
         }
 
         BufferedReader inputStreamReader = new BufferedReader(new InputStreamReader(inputStream));
-
         int i = 1;
         String line ="";
-
+        // Lecture du fichier
         do {
             try {
                 line = inputStreamReader.readLine();
@@ -66,12 +66,12 @@ public class ListeLevel extends Activity {
                 e.printStackTrace();
             }
 
+            // Ajout d'une nouvelle grille
             grilles.add(new VGrille(Integer.parseInt(level), i, 0, line));
             i++;
-
         }while (line != null);
 
-
+        // Création de l'adaptatateur
         monAdaptater adapter = new monAdaptater(this, grilles);
         listGrille.setAdapter(adapter);
 
@@ -93,6 +93,7 @@ public class ListeLevel extends Activity {
                 builder.setNegativeButton("Continue", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
+                        // Passage vers la grille
                         Intent intent = new Intent(ListeLevel.this, Grille.class);
                         intent.putExtra("grille", grille.getGrille());
                         startActivity(intent);

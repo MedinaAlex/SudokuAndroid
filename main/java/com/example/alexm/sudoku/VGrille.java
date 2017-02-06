@@ -11,6 +11,13 @@ public class VGrille  {
     private int done;
     private String grille;
 
+    /**
+     * Constructeur d'une VGrille
+     * @param level le niveau de difficulté
+     * @param num le numéro de la grille
+     * @param done le pourcentage effectué
+     * @param grille la grille de Sudoku
+     */
     public VGrille(int level, int num, int done, String grille) {
         this.level = level;
         this.num = num;
